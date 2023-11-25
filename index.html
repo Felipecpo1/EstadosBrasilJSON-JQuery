@@ -11,24 +11,29 @@
     </script>
 </head>
 <body>
-    <input id="input" type="text" placeholder="Digite um Estado do Brasil">
+    <input  id="valor" type="text" placeholder="Digite um Estado do Brasil">
     <button id="pesquisar">Pesquisar</button>
     <div id="infos"></div>
 </body>
 
 <script>
-    var url = "https://my-json-server.typicode.com/Felipecpo1/main/cursos/acre"
+    var url = "https://my-json-server.typicode.com/Felipecpo1/main/cursos"
     $.ajax(url)
         .done(function(json){
+            $('#pesquisar').on('click', function(){
+                let valor = $('#valor').val()
+                console.log(valor)
+            })
             let string = JSON.stringify(json)
             //$('body').append(string)
             let obj = JSON.parse(string)
             console.log(obj)
-            //$('#infos').append(`<img src='${obj[0].url}' /> <p>${obj[0].estado}</p><bt><p>${obj[0].capital}</p><p>${obj[0].populacao}</p>`)
 
         })
         .fail(function(){
             alert('JSON não encontrado')
         })
+    
+    
 </script>
 </html>
