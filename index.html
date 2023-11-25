@@ -17,13 +17,14 @@
 </body>
 
 <script>
-    var url = "estados.json"
+    var url = "https://my-json-server.typicode.com/Felipecpo1/main/cursos/acre"
     $.ajax(url)
         .done(function(json){
             let string = JSON.stringify(json)
             //$('body').append(string)
             let obj = JSON.parse(string)
-            $('#infos').append(`<img src='${obj[0].url}' /> <p>${obj[0].estado}</p><bt><p>${obj[0].capital}</p><p>${obj[0].populacao}</p>`)
+            console.log(obj)
+            //$('#infos').append(`<img src='${obj[0].url}' /> <p>${obj[0].estado}</p><bt><p>${obj[0].capital}</p><p>${obj[0].populacao}</p>`)
 
         })
         .fail(function(){
