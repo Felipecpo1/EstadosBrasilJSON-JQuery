@@ -3,36 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Encontre seu Estado</title>
     <script
         src="https://code.jquery.com/jquery-3.7.1.js"
         integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
         crossorigin="anonymous">
     </script>
+    <style>
+        body{
+            background-color: rgb(247, 255, 19);
+            display: block;
+            text-align: center;
+            border: 3px solid rgb(2, 173, 2);
+            padding: 5px;
+        }
+
+        h1{
+            font-family: Arial, Helvetica, sans-serif;
+            color:blue;
+            border-bottom: 4px solid rgb(2, 173, 2);
+            border-radius: 20px;
+        }
+
+        body, #campo1{
+            height: 100vh;
+            border-radius: 20px;
+        }
+
+        input{
+            z-index: 2;
+            border-radius: 5px;
+            width: 200px;
+            height: 30px;
+            text-align: center;
+            border: 3px solid blue;
+        }
+
+        input:hover{
+            width:220px ;
+            transition: 0.5s;
+        }
+
+        button{
+            z-index: 1;
+            cursor: pointer;
+            font-weight: bold;
+            color: rgb(0, 0, 0);
+            border-radius: 5px;
+            border: 2px solid green;
+            padding: 8px;
+            background-color: rgb(137, 255, 137);
+        }
+
+        button:hover{
+            transition: 0.5s;
+            color: white;
+            background-color: rgb(5, 164, 5);
+            border: 2px solid rgb(0, 106, 0);
+        }
+
+        #infos{
+            color: blue;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+        }
+
+        #infos img{
+            padding: 20px;
+            width: 320px;
+        }
+
+    </style>
 </head>
 <body>
-    <input  id="valor" type="text" placeholder="Digite um Estado do Brasil">
-    <button id="pesquisar">Pesquisar</button>
-    <div id="infos"></div>
+    <div id="campo1">
+        <h1>Pesquise um <br> <span>estado brasileiro:</span></h1>
+        <input  id="estado" type="text" placeholder="Ex: Roraima, Piauí...">
+        <button id="pesquisar">Pesquisar</button> 
+        <div id="infos"></div>
+    </div>
+    
 </body>
 
 <script>
-    var url = "https://my-json-server.typicode.com/Felipecpo1/main/cursos"
-    $.ajax(url)
-        .done(function(json){
-            $('#pesquisar').on('click', function(){
-                let valor = $('#valor').val()
-                console.log(valor)
-            })
-            let string = JSON.stringify(json)
-            //$('body').append(string)
-            let obj = JSON.parse(string)
-            console.log(obj)
 
-        })
-        .fail(function(){
-            alert('JSON não encontrado')
-        })
+    $('#pesquisar').on('click', function(){
+        //pegando o valor do input
+        let valor = $('#estado').val()
+        //convertendo o valor do input em letras minusculas
+        var valorB = valor.toLowerCase()
+        //funçao para trocar os caracteres especiais por letras normais
+        function troca(vogal){
+	    return vogal.replace(/[ã]/g, 'a').replace(/[í]/g, 'i').replace(/[á]/g, 'a').replace(/[ô]/g, 'o')
+        }
+        //chamando a função para o valor digitado e convertido no input
+        valorB = troca(valorB)
+        //URL + valorb que será o estado digitado pelo usuário, ja convertido pelas linhas acima
+        var url = 'https://my-json-server.typicode.com/Felipecpo1/main/cursos/' + valorB
+        //AJAX para abertura de conexão com o json criado
+        $.ajax(url)
+            .done(function(json){
+                //stringfy para o json capturadp
+                var string = JSON.stringify(json)
+                //conversão do json capturado para objeto
+                var objs = JSON.parse(string)
+                //limpando o campo de infos toda vez que um nova estado for pesquisado
+                $('#infos').empty()
+                //removendo o que foi digitado no camp de pesquisa 
+                $('#estado').val('')
+                //mostrando o json capturado e convertido para html
+                $('#infos').append(`<img src = '${objs.url}'/>`+'<div>Estado: ' + objs.estado+'<br> Capital: '+objs.capital + '<br> População: ' + objs.populacao +'</div>')
+            }
+            )
+            .fail(function(){
+                alert('Estado não encontrado')
+            })
+    }
+    )
     
     
 </script>
